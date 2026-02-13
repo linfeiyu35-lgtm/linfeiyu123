@@ -633,6 +633,3 @@
   drawWheel(rotation);
 })();
 </script>
-
-</body>
-</html>
