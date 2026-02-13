@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>我欠你一次认真的聊天</title>
+  <title>我想认真把你放在心上</title>
   <style>
     :root{
       --bgA:#fff1f5;
@@ -27,7 +27,7 @@
     }
     .wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:22px;}
     .card{
-      width:min(680px, 94vw);
+      width:min(720px, 94vw);
       background:var(--card);
       border:1px solid #ffffff80;
       border-radius:var(--radius);
@@ -55,7 +55,7 @@
       padding:12px 16px; border-radius:16px;
       font-size:15px; font-weight:800;
       box-shadow: 0 10px 22px rgba(0,0,0,.12);
-      transition: transform .16s ease, filter .16s ease;
+      transition: transform .16s ease, filter .16s ease, opacity .16s ease;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
@@ -68,6 +68,7 @@
       border: 1px solid rgba(17,24,39,.10);
       box-shadow: 0 10px 22px rgba(0,0,0,.08);
     }
+
     .chipRow{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:10px;}
     .chip{
       border:1px solid rgba(17,24,39,.10);
@@ -87,6 +88,7 @@
       border-color: rgba(255,77,109,.35);
       background: rgba(255,77,109,.12);
     }
+
     .grid{
       display:grid;
       grid-template-columns: 1fr;
@@ -95,25 +97,13 @@
     @media (min-width:560px){
       .grid{grid-template-columns: 1fr 1fr;}
     }
-    textarea{
-      width:100%;
-      min-height:92px;
-      resize:none;
-      border-radius:16px;
-      border: 1px solid rgba(17,24,39,.12);
-      padding:12px 12px;
-      font-size:14px;
-      line-height:1.6;
-      background: rgba(255,255,255,.9);
-      outline:none;
-    }
-    textarea:focus{border-color: rgba(79,70,229,.35); box-shadow: 0 0 0 4px rgba(79,70,229,.12);}
+
     .page{display:none;}
     .page.show{display:block;}
     .fadeIn{animation:fade .22s ease;}
     @keyframes fade{from{opacity:.6; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-    .copyBox{
+    .quote{
       background: rgba(17,24,39,.04);
       border: 1px solid rgba(17,24,39,.08);
       border-radius: 16px;
@@ -123,6 +113,8 @@
       font-size:14px;
       line-height:1.7;
     }
+    .ok{color:var(--ok); font-weight:900;}
+
     .toast{
       position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
       background: rgba(17,24,39,.92);
@@ -131,7 +123,7 @@
       border-radius:999px;
       font-size:13px;
       display:none;
-      z-index:99;
+      z-index:999;
     }
 
     /* Wheel */
@@ -156,33 +148,46 @@
       font-size:16px;
       text-align:center;
     }
-    .good{color: var(--ok);}
-    .smallLink{
-      display:inline-block;
-      margin-top:6px;
-      font-size:13px;
-      color: rgba(79,70,229,.95);
-      text-decoration: underline;
-      cursor:pointer;
+    .confetti{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden; display:none;
+      z-index:99;
+    }
+    .confetti.show{display:block;}
+    .confetti i{
+      position:absolute; top:-12px; width:10px; height:14px; border-radius:2px;
+      opacity:.9; animation: fall 1200ms linear forwards;
+    }
+    @keyframes fall{
+      to{ transform: translateY(110vh) rotate(320deg); opacity:1; }
     }
   </style>
 </head>
 <body>
 
+<div class="confetti" id="confetti"></div>
+<div class="toast" id="toast">已复制</div>
+
 <div class="wrap">
   <div class="card">
 
-    <!-- P1：情绪选择 + 先承认 -->
+    <!-- P1 -->
     <div class="page show fadeIn" id="p1">
-      <h1>我欠你一次认真的聊天</h1>
-      <p class="muted">我不会逼你“马上和好”。我只想把话说清楚，也把选择权交给你。</p>
+      <h1>我想认真把你放在心上</h1>
+      <p class="muted">你愿意点开这个页面，我已经很感谢了。</p>
 
       <div class="section">
-        <h2>我先把错误说清楚</h2>
-        <p style="text-align:left;margin:6px 0 0;">
-          视频的时候我没有认真和你聊天，一边跟你说话一边做自己的事。<br>
-          这会让你觉得你不重要、我只想要结果——你生气是合理的。<br>
-          <b>对不起，是我没有把注意力给到你。</b>
+        <h2>我先把我做错的说清楚</h2>
+        <div class="quote">
+视频的时候，我没有认真和你聊天。
+我一边跟你说话，一边做自己的事。
+这会让你感觉：你不重要，我只想快点要“结果”。
+
+这些感受都很合理。
+对不起，是我没有把注意力和尊重给到你。
+        </div>
+        <p class="muted" style="text-align:left;margin-top:10px;">
+          我不想用“哄一下就算了”的方式跳过过程。
+          我想把那个<strong>认真陪你</strong>的过程补回来。
         </p>
       </div>
 
@@ -193,87 +198,76 @@
           <div class="chip" data-key="angry">我还在生气</div>
           <div class="chip" data-key="space">我先不想说</div>
         </div>
-        <p class="muted" style="text-align:left;margin-top:10px;">
-          你选哪个都可以。我只想用<b>认真</b>把这件事补回来。
-        </p>
       </div>
 
       <div class="btnRow">
-        <button class="primary" id="toP2" disabled style="filter:grayscale(1);opacity:.6;">继续</button>
-        <button class="soft" id="previewMsg">先看我想发给你的话</button>
+        <button class="primary" id="go2" disabled style="opacity:.6;filter:grayscale(1);">继续</button>
       </div>
 
       <p class="muted" style="margin-top:10px;">
-        你随时可以退出页面。你舒服最重要。
+        你随时可以关掉页面。你舒服最重要。
       </p>
     </div>
 
-    <!-- P2：根据她选的情绪生成回应 + 让她决定下一步 -->
+    <!-- P2 -->
     <div class="page" id="p2">
-      <h1>我想这样跟你说</h1>
-      <p class="muted">这是我最想表达的内容（你也可以直接复制发给她）。</p>
+      <h1>我会这样对待你的情绪</h1>
+      <p class="muted">不辩解、不抢结论、不催你原谅。</p>
 
       <div class="section">
-        <h2>这段话可以直接复制</h2>
-        <div class="copyBox" id="msgBox"></div>
-        <div class="btnRow">
-          <button class="primary" id="copyBtn">复制这段话</button>
-          <button class="soft" id="editBtn">我想再补一句</button>
-        </div>
-        <div id="editArea" style="display:none;margin-top:10px;">
-          <textarea id="extraLine" placeholder="补一句你自己的话（比如她的昵称、你们的细节、你最在意她哪里难过）"></textarea>
-          <div class="btnRow">
-            <button class="primary" id="applyEdit">加入到上面那段</button>
-            <button class="soft" id="cancelEdit">算了</button>
-          </div>
-        </div>
+        <h2>我想对你说</h2>
+        <div class="quote" id="replyBox"></div>
       </div>
 
       <div class="section">
-        <h2>你愿意让我怎么补回来？（你来选节奏）</h2>
-        <div class="grid">
+        <h2>你希望我怎么补回来？（你来决定节奏）</h2>
+        <div class="grid" id="compGrid">
           <button class="soft" data-comp="A">A：现在/今晚专心视频 20 分钟（我只听你说）</button>
           <button class="soft" data-comp="B">B：你讲我听 10 分钟 + 我复述确认 2 分钟</button>
-          <button class="soft" data-comp="C">C：你先不想聊，我先安静，等你愿意再说</button>
-          <button class="soft" data-comp="D">D：你定时间，我按你方便的来</button>
+          <button class="soft" data-comp="C">C：你先不想聊也没关系，我先安静，等你愿意再说</button>
+          <button class="soft" data-comp="D">D：你定时间，你舒服最重要</button>
         </div>
         <p class="muted" style="text-align:left;margin-top:10px;">
-          选完后我会给你一段“下一步确认话术”，让你发给她更自然。
+          你选哪个都行。我会照做。
         </p>
       </div>
 
       <div class="btnRow">
-        <button class="secondary" id="backP1">返回</button>
-        <button class="primary" id="toP3" disabled style="filter:grayscale(1);opacity:.6;">生成下一步</button>
+        <button class="secondary" id="back1">返回</button>
+        <button class="primary" id="go3" disabled style="opacity:.6;filter:grayscale(1);">下一步</button>
       </div>
     </div>
 
-    <!-- P3：补偿确认 + 可选小转盘（随机 or 她决定） -->
+    <!-- P3 -->
     <div class="page" id="p3">
-      <h1>把过程补回来</h1>
-      <p class="muted">不是为了“立刻和好”，而是让你感到：我在认真对待你。</p>
+      <h1>谢谢你给我一个“过程”</h1>
+      <p class="muted">你不需要立刻原谅我，但我会把认真做出来。</p>
 
       <div class="section">
         <h2>你选的方式</h2>
-        <div class="copyBox" id="chosenComp"></div>
-        <div style="margin-top:10px;">
-          <textarea id="timeNote" placeholder="（可选）你可以写：你方便的时间/我现在就可以/我会把手机放下只看你……"></textarea>
-        </div>
+        <div class="quote" id="chosenBox"></div>
+        <p class="muted" style="text-align:left;margin-top:10px;">
+          如果你愿意，你可以直接回我一句：<span class="ok">“就按这个来”</span> 或者 <span class="ok">“我再想想”</span>。
+        </p>
       </div>
 
-      <div class="section">
-        <h2>你可以发给她的“下一步确认话术”</h2>
-        <div class="copyBox" id="nextMsg"></div>
-        <div class="btnRow">
-          <button class="primary" id="copyNext">复制这段话</button>
-          <button class="soft" id="updateNext">把上面的时间/补充加入</button>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>（可选）小小的“开心一下”</h2>
+      <!-- 新增：反馈给我 -->
+      <div class="section" id="feedbackSection" style="display:none;">
+        <h2>把你的选择发给我</h2>
         <p class="muted" style="text-align:left;margin-top:-2px;">
-          如果她愿意玩一下，就转个小转盘；如果不想玩，也完全没关系。
+          这段不会自动上传任何信息；你点“复制/分享”再发给我就可以啦。
+        </p>
+        <div class="quote" id="feedbackBox"></div>
+        <div class="btnRow">
+          <button class="primary" id="copyFeedback">复制</button>
+          <button class="soft" id="shareFeedback">分享</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>（可选）开心一下的小转盘</h2>
+        <p class="muted" style="text-align:left;margin-top:-2px;">
+          你想玩就玩一下；不想玩就点“你定”。
         </p>
 
         <div class="pointer"></div>
@@ -281,26 +275,24 @@
 
         <div class="btnRow">
           <button class="primary" id="spinBtn">随机转一下</button>
-          <button class="soft" id="youDecideBtn">不转：全都听你的</button>
+          <button class="soft" id="youDecideBtn">不转：你来定</button>
         </div>
 
         <div class="result" id="wheelResult"></div>
       </div>
 
       <div class="btnRow">
-        <button class="secondary" id="backP2">返回</button>
-        <button class="primary" id="restart">重新开始</button>
+        <button class="secondary" id="back2">返回</button>
+        <button class="primary" id="restart">再看一遍</button>
       </div>
 
       <p class="muted" style="margin-top:10px;">
-        提醒：如果她还在气头上，先别急着求结果。先把“认真”做出来。
+        你值得被认真对待。真的。
       </p>
     </div>
 
   </div>
 </div>
-
-<div class="toast" id="toast">已复制</div>
 
 <script>
 (() => {
@@ -322,14 +314,11 @@
     clearTimeout(popToast._t);
     popToast._t = setTimeout(()=> toast.style.display="none", 1200);
   }
-
-  // Copy helper
   async function copyText(text){
     try{
       await navigator.clipboard.writeText(text);
       popToast("已复制");
     }catch(e){
-      // Fallback
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);
@@ -340,167 +329,182 @@
     }
   }
 
-  // Mood selection
-  let moodKey = null;
-  const moodChips = Array.from(document.querySelectorAll("#moods .chip"));
-  const toP2 = $("toP2");
+  // Confetti
+  const confetti = $("confetti");
+  function popConfetti(){
+    confetti.innerHTML = "";
+    confetti.classList.add("show");
+    const colors = ["#ff4d6d","#4f46e5","#10b981","#f59e0b","#22c55e","#0ea5e9"];
+    const n = 36;
+    for(let i=0;i<n;i++){
+      const el = document.createElement("i");
+      el.style.left = Math.random()*100 + "vw";
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.transform = `translateY(0) rotate(${Math.random()*120}deg)`;
+      el.style.animationDuration = (900 + Math.random()*600) + "ms";
+      el.style.opacity = (0.7 + Math.random()*0.3).toFixed(2);
+      confetti.appendChild(el);
+      el.style.animationDelay = (Math.random()*120) + "ms";
+    }
+    setTimeout(()=> confetti.classList.remove("show"), 1400);
+  }
 
+  // ===== 记录她的选择（用于反馈）=====
+  let moodKey = null;
+  let compKey = null;
+  let wheelChoice = ""; // 她抽到/选择的转盘结果
+  function moodText(key){
+    switch(key){
+      case "talk": return "我想听你解释";
+      case "angry": return "我还在生气";
+      case "space": return "我先不想说";
+      default: return "（未选择）";
+    }
+  }
+  function compText(key){
+    switch(key){
+      // 你文件里这里已经改了 A 的含义，我保留它
+      case "A": return "A：现在/明天视频唱一首歌，并认真反省道歉";
+      case "B": return "B：你讲我听 10 分钟 + 我复述确认 2 分钟";
+      case "C": return "C：你先不想聊也没关系，我先安静，等你愿意再说";
+      case "D": return "D：你定时间，你舒服最重要";
+      default: return "";
+    }
+  }
+  function buildFeedback(){
+    const when = new Date();
+    const ts = `${when.getFullYear()}-${String(when.getMonth()+1).padStart(2,'0')}-${String(when.getDate()).padStart(2,'0')} `
+             + `${String(when.getHours()).padStart(2,'0')}:${String(when.getMinutes()).padStart(2,'0')}`;
+    const lines = [
+      "我看完啦（来自页面的小反馈）",
+      `- 我现在的感受：${moodText(moodKey)}`,
+      `- 我希望你这样补回来：${compText(compKey) || "（未选择）"}`,
+      `- 转盘结果：${wheelChoice || "（没转 / 还没选）"}`,
+      `- 时间：${ts}`
+    ];
+    return lines.join("\n");
+  }
+  function refreshFeedbackUI(){
+    if(!moodKey || !compKey) return;
+    $("feedbackSection").style.display = "block";
+    $("feedbackBox").textContent = buildFeedback();
+  }
+
+  // ===== P1 选择心情 =====
+  const moodChips = Array.from(document.querySelectorAll("#moods .chip"));
+  const go2 = $("go2");
   moodChips.forEach(chip => {
     chip.addEventListener("click", () => {
       moodChips.forEach(c=>c.classList.remove("selected"));
       chip.classList.add("selected");
       moodKey = chip.dataset.key;
-
-      toP2.disabled = false;
-      toP2.style.filter = "none";
-      toP2.style.opacity = "1";
+      go2.disabled = false;
+      go2.style.filter = "none";
+      go2.style.opacity = "1";
     });
   });
 
-  // Base apology message templates
-  function buildMsg(){
+  function buildReply(){
     const base =
-`我刚刚认真想了下，你生气是因为我在视频的时候没有认真跟你聊天：一边跟你说话一边做自己的事。
-这会让你觉得你不重要、我只想快点拿到“和好结果”。这不是你的问题，是我不够尊重你的感受。对不起。
+`我听见了。
+我不想解释为自己开脱。
 
-我不想用搞笑或套路跳过过程。我想把“认真陪你”的过程补回来。`;
+我在视频的时候分心做别的，这就是敷衍。
+你会生气、会难过，都很正常。
+对不起。`;
 
     if(moodKey === "talk"){
       return base + `
-如果你愿意，你说什么我都先听完，我不打断、不辩解。我想先把你感受弄明白。`;
+
+如果你愿意说，我想先听你把话说完。
+你说完之后，我会复述确认：我有没有真正听懂你。`;
     }
     if(moodKey === "angry"){
       return base + `
-你现在还在生气完全合理。我先不求你马上原谅我，只想先把我该做的做到：把注意力和尊重补给你。`;
+
+你现在还在生气完全合理。
+我不求你马上原谅我，我只想先把“认真”做到：把你放在第一位。`;
     }
-    // space
     return base + `
-如果你现在不想说也没关系。我不会逼你，我会等你愿意的时候再聊。`;
+
+如果你现在不想说也没关系。
+我不会逼你，我会等你愿意的时候再聊。`;
   }
 
-  // Preview button on P1
-  $("previewMsg").addEventListener("click", async () => {
-    if(!moodKey){
-      popToast("先选一个感受");
-      return;
-    }
-    await copyText(buildMsg().trim());
-  });
-
-  // Go P2
-  $("toP2").addEventListener("click", () => {
-    $("msgBox").textContent = buildMsg().trim();
+  go2.addEventListener("click", () => {
+    $("replyBox").textContent = buildReply().trim();
     show(p2);
   });
 
-  // Edit message
-  $("copyBtn").addEventListener("click", () => copyText($("msgBox").textContent));
-  $("editBtn").addEventListener("click", () => {
-    $("editArea").style.display = "block";
-  });
-  $("cancelEdit").addEventListener("click", () => {
-    $("editArea").style.display = "none";
-    $("extraLine").value = "";
-  });
-  $("applyEdit").addEventListener("click", () => {
-    const extra = $("extraLine").value.trim();
-    if(!extra){
-      popToast("先写一句再加入");
-      return;
-    }
-    $("msgBox").textContent = ($("msgBox").textContent.trim() + "\n\n" + extra).trim();
-    $("editArea").style.display = "none";
-    $("extraLine").value = "";
-    popToast("已加入");
-  });
+  // back to p1
+  $("back1").addEventListener("click", () => show(p1));
 
-  // Back to P1
-  $("backP1").addEventListener("click", () => show(p1));
-
-  // Compensation selection
-  let compKey = null;
+  // ===== P2 选择补偿方式 =====
   const compButtons = Array.from(document.querySelectorAll("[data-comp]"));
-  const toP3 = $("toP3");
-
-  function compText(key){
-    switch(key){
-      case "A": return "A：现在/今晚专心视频 20 分钟（我把手机放一边，只听你说）";
-      case "B": return "B：你讲我听 10 分钟 + 我复述确认 2 分钟（确保我真的懂你）";
-      case "C": return "C：你先不想聊也没关系，我先安静，不消失，等你愿意再说";
-      case "D": return "D：你定时间，你舒服最重要，我按你方便的来";
-      default: return "";
-    }
-  }
+  const go3 = $("go3");
 
   compButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      compButtons.forEach(b => b.style.filter = "none");
-      compButtons.forEach(b => b.style.border = "none");
-      btn.style.filter = "brightness(1.03)";
+      compButtons.forEach(b => { b.style.border="none"; b.style.filter="none"; });
       btn.style.border = "2px solid rgba(255,77,109,.35)";
+      btn.style.filter = "brightness(1.03)";
       compKey = btn.dataset.comp;
 
-      toP3.disabled = false;
-      toP3.style.filter = "none";
-      toP3.style.opacity = "1";
+      go3.disabled = false;
+      go3.style.filter = "none";
+      go3.style.opacity = "1";
     });
   });
 
-  // Generate next-step message
-  function buildNextMsg(extraTime=""){
-    const head = "那我们就按这个来：";
-    const chosen = compText(compKey);
-
-    const timeLine = extraTime ? `\n\n补充：${extraTime}` : "";
-
-    const closing =
-`\n\n如果你现在还是不想聊也没关系，我尊重你。你只要告诉我：你最难受的是“我分心”，还是“我让你觉得你不重要”？我会按你在意的点去改。`;
-
-    return `${head}\n${chosen}${timeLine}${closing}`.trim();
-  }
-
-  $("toP3").addEventListener("click", () => {
-    $("chosenComp").textContent = compText(compKey);
-    $("nextMsg").textContent = buildNextMsg("").trim();
+  go3.addEventListener("click", () => {
+    $("chosenBox").textContent =
+`我会照你选的来：\n${compText(compKey)}\n\n你不用急着原谅我。\n我先把“认真”还给你。`;
+    popConfetti();
     show(p3);
+    refreshFeedbackUI();
   });
 
-  // Back to P2
-  $("backP2").addEventListener("click", () => show(p2));
+  $("back2").addEventListener("click", () => show(p2));
 
-  // Update next message with time note
-  $("copyNext").addEventListener("click", () => copyText($("nextMsg").textContent));
-  $("updateNext").addEventListener("click", () => {
-    const extra = $("timeNote").value.trim();
-    $("nextMsg").textContent = buildNextMsg(extra);
-    popToast("已更新");
-  });
-
-  // Restart
   $("restart").addEventListener("click", () => {
     // reset
     moodKey = null;
     compKey = null;
+    wheelChoice = "";
     moodChips.forEach(c=>c.classList.remove("selected"));
-    toP2.disabled = true; toP2.style.filter="grayscale(1)"; toP2.style.opacity=".6";
-    toP3.disabled = true; toP3.style.filter="grayscale(1)"; toP3.style.opacity=".6";
+    go2.disabled = true; go2.style.filter="grayscale(1)"; go2.style.opacity=".6";
+    go3.disabled = true; go3.style.filter="grayscale(1)"; go3.style.opacity=".6";
     compButtons.forEach(b => { b.style.border="none"; b.style.filter="none"; });
-    $("msgBox").textContent = "";
-    $("nextMsg").textContent = "";
-    $("chosenComp").textContent = "";
-    $("timeNote").value = "";
     $("wheelResult").textContent = "";
+    $("feedbackSection").style.display = "none";
     show(p1);
+  });
+
+  // ===== 反馈：复制 & 分享 =====
+  $("copyFeedback").addEventListener("click", () => copyText(buildFeedback()));
+  $("shareFeedback").addEventListener("click", async () => {
+    const text = buildFeedback();
+    if(navigator.share){
+      try{
+        await navigator.share({ title:"页面反馈", text });
+      }catch(e){
+        // 用户取消分享也算正常
+      }
+    }else{
+      await copyText(text);
+      popToast("已复制（此设备不支持分享）");
+    }
   });
 
   /** Wheel (optional, random) **/
   const canvas = $("wheel");
   const ctx = canvas.getContext("2d");
 
-  const labels = ["看扑克牌魔术","轻轻拍两下","100元现金红包","全都听你的"];
+  // 你文件里这组转盘文案我保留（提示：有些可能会踩雷，自己确认下）
+  const labels = ["30个俯卧撑","挠痒痒30分钟（位置自选）","一次全身搓澡按摩","你来定（我听你的）"];
   const segCount = labels.length;
   const segAngle = (Math.PI*2)/segCount;
-  const startAngle = -Math.PI/2; // from top
+  const startAngle = -Math.PI/2;
   const R = canvas.width/2;
   const center = {x:R,y:R};
 
@@ -510,7 +514,6 @@
   function drawWheel(rot){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // soft outer
     ctx.save();
     ctx.translate(center.x, center.y);
     ctx.beginPath();
@@ -548,7 +551,6 @@
       ctx.restore();
     }
 
-    // center circle
     ctx.beginPath();
     ctx.arc(center.x, center.y, 76, 0, Math.PI*2);
     ctx.fillStyle = "rgba(255,255,255,.92)";
@@ -558,7 +560,7 @@
     ctx.stroke();
 
     ctx.fillStyle = "#111827";
-    ctx.font = '900 28px system-ui, -apple-system, "PingFang SC", "Microsoft YaHei"';
+    ctx.font = '900 26px system-ui, -apple-system, "PingFang SC", "Microsoft YaHei"';
     ctx.textAlign = "center";
     ctx.fillText("转一下", center.x, center.y + 10);
   }
@@ -566,12 +568,7 @@
   function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
 
   function indexFromRotation(rot){
-    // Pointer at top (-PI/2). Determine which segment is at top.
-    // Compute angle for top direction in wheel local coords:
     const topAngle = (-Math.PI/2);
-    // Convert to wheel's segment angle space:
-    // segment center i at: startAngle + rot + (i+0.5)*segAngle
-    // find i whose center is closest to topAngle (mod 2PI)
     let bestI = 0, bestD = Infinity;
     for(let i=0;i<segCount;i++){
       const centerAng = startAngle + rot + (i+0.5)*segAngle;
@@ -588,16 +585,14 @@
     $("wheelResult").textContent = "";
 
     const targetIndex = Math.floor(Math.random()*segCount);
-
-    // Make target segment center land at top
     const desiredRot = (-Math.PI/2) - startAngle - (targetIndex + 0.5)*segAngle;
 
-    const extraTurns = 5 + Math.floor(Math.random()*3); // 5-7 turns
+    const extraTurns = 5 + Math.floor(Math.random()*3);
     const from = rotation;
     let to = extraTurns * Math.PI*2 + desiredRot;
     while(to < from) to += Math.PI*2;
 
-    const duration = 3600;
+    const duration = 3400;
     const t0 = performance.now();
 
     function tick(now){
@@ -614,8 +609,12 @@
         drawWheel(rotation);
 
         const idx = indexFromRotation(rotation);
-        $("wheelResult").innerHTML = `🎉 抽到：<span class="good">${labels[idx]}</span>`;
-        if (navigator.vibrate) navigator.vibrate([40, 30, 60]);
+        wheelChoice = labels[idx];
+        $("wheelResult").innerHTML = `🎉 抽到：<span class="ok">${wheelChoice}</span>`;
+        popConfetti();
+        if (navigator.vibrate) navigator.vibrate([30, 30, 60]);
+        refreshFeedbackUI();
+        $("feedbackBox").textContent = buildFeedback();
       }
     }
     requestAnimationFrame(tick);
@@ -624,10 +623,13 @@
   $("spinBtn").addEventListener("click", spinRandom);
 
   $("youDecideBtn").addEventListener("click", () => {
-    $("wheelResult").innerHTML = `✅ 我不转了：<span class="good">全都听你的</span>`;
+    wheelChoice = "你来定（我听你的）";
+    $("wheelResult").innerHTML = `✅ 好：<span class="ok">${wheelChoice}</span>`;
+    popConfetti();
+    refreshFeedbackUI();
+    $("feedbackBox").textContent = buildFeedback();
   });
 
-  // initial draw
   drawWheel(rotation);
 })();
 </script>
